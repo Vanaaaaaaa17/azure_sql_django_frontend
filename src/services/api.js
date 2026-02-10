@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://bearlab-backend-d9awbhgfe4c6abdq.southeastasia-01.azurewebsites.net/api',
+  baseURL: import.meta.env.VITE_API_URL,
+    // baseURL: 'https://bearlab-backend-d9awbhgfe4c6abdq.southeastasia-01.azurewebsites.net/api',
   // baseURL: 'http://127.0.0.1:8000/api', // Local API
   headers: {
     'Content-Type': 'application/json',
@@ -54,6 +55,17 @@ export const reviewService = {
   create: (data) => api.post('/reviews/', data).then(res => res.data),
   update: (id, data) => api.put(`/reviews/${id}/`, data).then(res => res.data),
   delete: (id) => api.delete(`/reviews/${id}/`).then(res => res.data),
+};
+
+const functionApi = axios.create({
+  baseURL: import.meta.env.VITE_FUNCTION_API_URL || 'https://<YOUR_FUNCTION_APP_NAME>.azurewebsites.net/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export const contentFilterService = {
+  filterComment: (comment) => functionApi.post('/filter_comment', { comment }).then(res => res.data),
 };
 
 export default api;
